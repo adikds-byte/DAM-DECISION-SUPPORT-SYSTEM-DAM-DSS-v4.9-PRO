@@ -143,6 +143,24 @@
         }
         .radar-pulse-ring { animation: radarPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite; }
         @keyframes radarPing { 0% { transform: scale(0.6); opacity: 1; } 75%, 100% { transform: scale(2.2); opacity: 0; } }
+    
+        /* AUTO-HIDE TOOLTIPS ON SMARTPHONE & TABLET (<= 1024px) */
+        @media (max-width: 1024px) {
+            .holo-tooltip, .custom-tooltip, [data-tooltip]::before, [data-tooltip]::after {
+                display: none !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+            }
+        }
+
+        :root {
+            --app-font-scale: 1;
+        }
+        body {
+            font-size: calc(15px * var(--app-font-scale, 1));
+        }
+
     </style>
 </head>
 <body id="appBody" class="theme-dark bg-[var(--bg-main)] text-[var(--text-main)] p-3 md:p-5 min-h-screen flex flex-col justify-between overflow-x-hidden relative pb-28">
@@ -183,60 +201,93 @@
             </div>
 
             <!-- METRIC CARDS & ACTION BUTTONS -->
-            <div class="flex flex-col md:flex-row items-center gap-3 w-full xl:w-auto justify-end flex-1">
-                <div class="grid grid-cols-4 gap-2 text-center w-full md:w-auto shrink-0">
-                    <div class="px-2.5 py-1.5 bg-slate-950/60 border border-[var(--border-color)] rounded-xl min-w-[85px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase">ELEVASI (TMA)</div>
+            <div class="flex flex-col xl:flex-row items-center gap-3 w-full xl:w-auto justify-end flex-1">
+                <div class="grid grid-cols-4 gap-1.5 text-center w-full sm:w-auto shrink-0">
+                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
+                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblTmaHeader">ELEVASI (TMA)</div>
                         <div id="top-tma-val" class="text-xs md:text-sm font-tech font-black text-cyan-400 mt-0.5">510.50 m</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-water text-cyan-400"></i> Tinggi Muka Air Waduk Normal</div>
+                        <div class="holo-tooltip"><i class="fa-solid fa-water text-cyan-400"></i> <span id="tipTmaHeader">Tinggi Muka Air Waduk Normal</span></div>
                     </div>
-                    <div class="px-2.5 py-1.5 bg-slate-950/60 border border-[var(--border-color)] rounded-xl min-w-[85px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase">INFLOW DAS</div>
+                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
+                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblInflowHeader">INFLOW DAS</div>
                         <div id="top-inflow-val" class="text-xs md:text-sm font-tech font-black text-blue-400 mt-0.5">145.0 m³/s</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i> Debit Masuk Sungai & DTA Danau</div>
+                        <div class="holo-tooltip"><i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i> <span id="tipInflowHeader">Debit Masuk Sungai & DTA Danau</span></div>
                     </div>
-                    <div class="px-2.5 py-1.5 bg-slate-950/60 border border-[var(--border-color)] rounded-xl min-w-[85px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase">OUTFLOW / TURBIN</div>
+                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
+                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblOutflowHeader">OUTFLOW / TURBIN</div>
                         <div id="top-outflow-val" class="text-xs md:text-sm font-tech font-black text-emerald-400 mt-0.5">140.0 m³/s</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-bolt text-emerald-400"></i> Pelepasan Turbin PLTA & Spillway</div>
+                        <div class="holo-tooltip"><i class="fa-solid fa-bolt text-emerald-400"></i> <span id="tipOutflowHeader">Pelepasan Turbin PLTA & Spillway</span></div>
                     </div>
-                    <div class="px-2.5 py-1.5 bg-slate-950/60 border border-[var(--border-color)] rounded-xl min-w-[85px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase">INDEKS IKK</div>
+                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
+                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblIkkHeader">INDEKS IKK</div>
                         <div id="top-ikk-val" class="text-xs md:text-sm font-tech font-black text-emerald-400 mt-0.5">0.86 (AMAN)</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-emerald-400"></i> Indeks Keamanan & Keberlanjutan Bendungan</div>
+                        <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-emerald-400"></i> <span id="tipIkkHeader">Indeks Keamanan & Keberlanjutan Bendungan</span></div>
                     </div>
                 </div>
 
-                <!-- ACTION BUTTONS -->
-                <div class="flex flex-col items-end gap-1.5 w-full md:w-auto">
-                    <div class="flex flex-wrap items-center gap-1.5 w-full justify-stretch sm:justify-end">
-                        <!-- DAM SWITCHER SELECTOR -->
-                        <div class="relative">
-                            <select id="headerDamSelect" onchange="switchDam(this.value)" class="bg-cyan-950 text-cyan-300 border-2 border-cyan-500/80 text-xs font-mono font-bold px-2.5 py-1.5 rounded-lg hover:bg-cyan-900 transition-all cursor-pointer shadow-md outline-none">
-                                <option value="poso">⚡ BENDUNGAN POSO-1 (SULTENG)</option>
-                                <option value="kerinci">🏔️ BENDUNGAN KERINCI (JAMBI)</option>
+                <!-- ACTION BUTTONS: 2 VERTICAL ROWS ONLY (SUSUNAN 2 BARIS VERTIKAL RAPI & PROFESIONAL) -->
+                <div class="flex flex-col gap-1.5 w-full xl:w-auto shrink-0 justify-center">
+                    <!-- BARIS 1: 4 TOMBOL OPERASIONAL UTAMA -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
+                        <div class="relative holo-tooltip-container">
+                            <select id="headerDamSelect" onchange="switchDam(this.value)" class="w-full h-8 bg-cyan-950 text-cyan-300 border border-cyan-500/80 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-900 transition-all cursor-pointer shadow-md outline-none">
+                                <option value="poso">⚡ POSO-1 (SULTENG)</option>
+                                <option value="kerinci">🏔️ KERINCI (JAMBI)</option>
                             </select>
+                            <div class="holo-tooltip"><i class="fa-solid fa-dam text-cyan-400"></i> <span id="tipDamSelect">Pilih Lokasi Bendungan</span></div>
                         </div>
-                        <button type="button" onclick="openScenarioModal()" class="bg-indigo-950 text-indigo-300 border border-indigo-500/60 text-xs font-mono font-bold px-3 py-1.5 rounded-lg hover:bg-indigo-900 transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
-                            <i class="fa-solid fa-code-compare"></i> <span>BANDINGKAN SKENARIO</span>
-                        </button>
-                        <button type="button" onclick="openEapModal()" class="bg-amber-950 text-amber-300 border border-amber-500/60 text-xs font-mono font-bold px-3 py-1.5 rounded-lg hover:bg-amber-900 transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
-                            <i class="fa-solid fa-triangle-exclamation"></i> <span>RTD &amp; SOP EAP</span>
-                        </button>
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="openScenarioModal()" class="w-full h-8 bg-indigo-950 text-indigo-300 border border-indigo-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-indigo-900 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-code-compare text-xs"></i> <span id="btnHeaderScenarios">SKENARIO OPERASI</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-code-compare text-indigo-400"></i> <span id="tipHeaderScenarios">Bandingkan 4 Skenario Pola Operasi</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="openEapModal()" class="w-full h-8 bg-amber-950 text-amber-300 border border-amber-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-amber-900 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-triangle-exclamation text-xs"></i> <span id="btnHeaderEap">RTD &amp; SOP EAP</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-triangle-exclamation text-amber-400"></i> <span id="tipHeaderEap">Rencana Tindak Darurat &amp; Mitigasi</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="openTechSpecModal()" class="w-full h-8 bg-blue-950 text-blue-300 border border-blue-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-blue-900 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-database text-xs"></i> <span id="btnHeaderTechSpec">SPESIFIKASI TEKNIK</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-database text-blue-400"></i> <span id="tipHeaderTechSpec">Data Teknis &amp; Instrumentasi</span></div>
+                        </div>
                     </div>
-                    <div class="flex flex-wrap items-center gap-1.5 w-full justify-stretch sm:justify-end">
-                        <button type="button" onclick="openTechSpecModal()" class="bg-blue-950 text-blue-300 border border-blue-500/60 text-[11px] font-mono font-bold px-2.5 py-1 rounded hover:bg-blue-900 flex items-center gap-1 cursor-pointer">
-                            <i class="fa-solid fa-database"></i> <span>SPESIFIKASI TEKNIK</span>
-                        </button>
-                        <button type="button" onclick="openVaultModal()" class="bg-slate-900 text-cyan-400 text-[11px] font-mono font-bold px-2.5 py-1 rounded border border-cyan-500/50 hover:bg-cyan-950 flex items-center gap-1 cursor-pointer">
-                            <i class="fa-brands fa-google-drive"></i> <span>G-DRIVE VAULT</span>
-                        </button>
-                        <button type="button" onclick="openCreatorModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-mono font-bold px-2.5 py-1 rounded border border-slate-700 flex items-center gap-1 cursor-pointer">
-                            <i class="fa-solid fa-user-graduate text-cyan-400"></i> <span>TIM PENGEMBANG</span>
-                        </button>
-                        <button type="button" onclick="toggleThemeInterface()" class="bg-slate-950 border border-slate-700 text-[11px] font-mono font-bold px-2.5 py-1 rounded text-slate-300 hover:bg-slate-900 flex items-center gap-1 cursor-pointer">
-                            <i id="themeIcon" class="fa-solid fa-moon"></i> <span id="themeText">DARK</span>
-                        </button>
+
+                    <!-- BARIS 2: 5 TOMBOL KONTROL, UTILITAS, ZOOM TEKS & TRANSLATE -->
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 w-full">
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="openVaultModal()" class="w-full h-7 bg-slate-900 text-cyan-400 text-[10.5px] font-mono font-bold px-2 rounded border border-cyan-500/50 hover:bg-cyan-950 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                <i class="fa-brands fa-google-drive text-xs"></i> <span id="btnHeaderVault">G-DRIVE VAULT</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-brands fa-google-drive text-cyan-400"></i> <span id="tipHeaderVault">Arsip Dokumen As-Built &amp; Laporan</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="openCreatorModal()" class="w-full h-7 bg-slate-800 hover:bg-slate-700 text-white text-[10.5px] font-mono font-bold px-2 rounded border border-slate-700 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-user-graduate text-cyan-400 text-xs"></i> <span id="btnHeaderTeam">TIM PENGEMBANG</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-user-graduate text-cyan-400"></i> <span id="tipHeaderTeam">Profil Tim Peneliti &amp; Pengembang</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" id="btnTextZoom" onclick="toggleFontSize()" class="w-full h-7 bg-slate-900 hover:bg-slate-800 text-amber-300 text-[10.5px] font-mono font-bold px-2 rounded border border-amber-500/60 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-text-height text-amber-400 text-xs"></i> <span id="fontZoomLabel">HURUF: 100%</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-text-height text-amber-400"></i> <span id="tipHeaderZoom">Perbesar / Perkecil Huruf Teks Dasbor</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" id="btnTranslate" onclick="toggleLanguage()" class="w-full h-7 bg-slate-900 hover:bg-slate-800 text-emerald-300 text-[10.5px] font-mono font-bold px-2 rounded border border-emerald-500/60 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-language text-emerald-400 text-xs"></i> <span id="translateLabel">ID ⇄ EN</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-language text-emerald-400"></i> <span id="tipHeaderTrans">Terjemahkan (Bahasa Indonesia / English)</span></div>
+                        </div>
+                        <div class="holo-tooltip-container">
+                            <button type="button" onclick="toggleThemeInterface()" class="w-full h-7 bg-slate-950 border border-slate-700 text-[10.5px] font-mono font-bold px-2 rounded text-slate-300 hover:bg-slate-900 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                <i id="themeIcon" class="fa-solid fa-moon text-xs"></i> <span id="themeText">DARK</span>
+                            </button>
+                            <div class="holo-tooltip"><i class="fa-solid fa-circle-half-stroke text-slate-300"></i> <span id="tipHeaderTheme">Beralih Tema Gelap / Terang</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -450,57 +501,58 @@
             </section>
 
             <!-- RIGHT PANEL: SIMULATOR VENSIM, SCENARIO MANAGER & IKK OUTPUT -->
-            <section class="lg:col-span-3 bg-[var(--bg-card)] p-4 rounded-2xl border-2 border-slate-800 flex flex-col gap-4 h-full shadow-lg">
+            <section class="lg:col-span-3 bg-[var(--bg-card)] p-3 rounded-2xl border-2 border-slate-800 flex flex-col gap-2.5 h-full shadow-lg">
                 <div>
-                    <div class="flex justify-between items-center border-b border-cyan-900/50 pb-2 mb-2.5">
-                        <h2 class="font-tech text-sm md:text-base font-black text-cyan-400 flex items-center gap-1.5 uppercase tracking-wider">
-                            <i class="fa-solid fa-sliders"></i> Simulator Hidrodinamika
+                    <div class="flex justify-between items-center border-b border-cyan-900/50 pb-1.5 mb-2">
+                        <h2 class="font-tech text-xs sm:text-sm font-black text-cyan-400 flex items-center gap-1.5 uppercase tracking-wider">
+                            <i class="fa-solid fa-sliders"></i> <span id="lblSimTitle">Simulator Hidrodinamika</span>
                         </h2>
-                        <span id="activeScenarioLabel" class="text-[10px] font-mono text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-600/60 font-bold uppercase">Skenario Normal Peaking</span>
+                        <span id="activeScenarioLabel" class="text-[9px] font-mono text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-600/60 font-bold uppercase">Skenario Normal Peaking</span>
                     </div>
 
                     <!-- SCENARIO PRESET SELECTOR -->
-                    <div class="mb-3">
-                        <label class="block text-[11px] font-bold text-slate-300 font-mono mb-1 uppercase">Pilih Skenario Pengoperasian Waduk:</label>
-                        <select id="scenarioPresetSelect" onchange="applyScenarioPreset()" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:border-cyan-500 font-mono">
-                            <option value="peaking">Skenario 1: Operasi Normal &amp; Optimasi PLTA Beban Puncak</option>
+                    <div class="mb-2 holo-tooltip-container">
+                        <label class="block text-[10px] font-bold text-slate-300 font-mono mb-1 uppercase" id="lblSelectScenario">PILIH SKENARIO PENGOPERASIAN WADUK:</label>
+                        <select id="scenarioPresetSelect" onchange="applyScenarioPreset()" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-[11px] text-white outline-none focus:border-cyan-500 font-mono cursor-pointer">
+                            <option value="peaking">Skenario 1: Operasi Normal &amp; Optimasi PLTA Peaking</option>
                             <option value="flood">Skenario 2: Siaga Banjir Ekstrem (Pre-Release &amp; Routing PMF)</option>
-                            <option value="drought">Skenario 3: Manajemen Kemarau &amp; Konservasi Muka Air Danau</option>
+                            <option value="drought">Skenario 3: Manajemen Kemarau &amp; Konservasi Air Danau</option>
                             <option value="seismic">Skenario 4: Siaga Darurat Pasca-Gempa Sesar Aktif</option>
                             <option value="custom">Skenario 5: Custom Parametrik Manual</option>
                         </select>
+                        <div class="holo-tooltip"><i class="fa-solid fa-sliders text-cyan-400"></i> <span id="tipScenarioPreset">Pilih Preset Skenario Pola Operasi Waduk &amp; PLTA</span></div>
                     </div>
 
                     <!-- SLIDERS CONTROLS -->
-                    <div class="space-y-3 bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                    <div class="space-y-2 bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 text-[11px] font-mono">
                         <div>
-                            <div class="flex justify-between font-bold text-blue-400 mb-1">
-                                <span><i class="fa-solid fa-cloud-showers-heavy"></i> INFLOW DAS (Q_in) <button onclick="openParamInfo('inflow')" class="ml-1 text-blue-300 hover:text-blue-100 text-[12px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
+                            <div class="flex justify-between font-bold text-blue-400 mb-0.5">
+                                <span><i class="fa-solid fa-cloud-showers-heavy"></i> <span id="lblSliderInflow">INFLOW DAS (Q_in)</span> <button onclick="openParamInfo('inflow')" class="ml-1 text-blue-300 hover:text-blue-100 text-[11px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
                                 <span id="lbl-inflow" class="text-white">145 m³/s</span>
                             </div>
                             <input type="range" id="slider-inflow" min="20" max="600" value="145" oninput="onSliderChange()" class="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
                         </div>
 
                         <div>
-                            <div class="flex justify-between font-bold text-cyan-400 mb-1">
-                                <span><i class="fa-solid fa-water"></i> ELEVASI AWAL (TMA) <button onclick="openParamInfo('tma')" class="ml-1 text-cyan-300 hover:text-cyan-100 text-[12px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
+                            <div class="flex justify-between font-bold text-cyan-400 mb-0.5">
+                                <span><i class="fa-solid fa-water"></i> <span id="lblSliderTma">ELEVASI AWAL (TMA)</span> <button onclick="openParamInfo('tma')" class="ml-1 text-cyan-300 hover:text-cyan-100 text-[11px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
                                 <span id="lbl-tma" class="text-white">510.50 m dpl</span>
                             </div>
                             <input type="range" id="slider-tma" min="507" max="514" step="0.05" value="510.50" oninput="onSliderChange()" class="w-full accent-cyan-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
                         </div>
 
                         <div>
-                            <div class="flex justify-between font-bold text-amber-400 mb-1">
-                                <span><i class="fa-solid fa-bolt"></i> DEBIT TURBIN PLTA <button onclick="openParamInfo('turbin')" class="ml-1 text-amber-300 hover:text-amber-100 text-[12px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
-                                <span id="lbl-turbin" class="text-white">130 m³/s (100% Beban)</span>
+                            <div class="flex justify-between font-bold text-amber-400 mb-0.5">
+                                <span><i class="fa-solid fa-bolt"></i> <span id="lblSliderTurbin">DEBIT TURBIN PLTA</span> <button onclick="openParamInfo('turbin')" class="ml-1 text-amber-300 hover:text-amber-100 text-[11px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
+                                <span id="lbl-turbin" class="text-white">130 m³/s (100%)</span>
                             </div>
                             <input type="range" id="slider-turbin" min="0" max="220" value="130" oninput="onSliderChange()" class="w-full accent-amber-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
                         </div>
 
                         <div>
-                            <div class="flex justify-between font-bold text-rose-400 mb-1">
-                                <span><i class="fa-solid fa-door-open"></i> BUKAAN PINTU SPILLWAY <button onclick="openParamInfo('spillway')" class="ml-1 text-rose-300 hover:text-rose-100 text-[12px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
-                                <span id="lbl-spillway" class="text-white">10% (Pelepasan Terkendali)</span>
+                            <div class="flex justify-between font-bold text-rose-400 mb-0.5">
+                                <span><i class="fa-solid fa-door-open"></i> <span id="lblSliderSpillway">BUKAAN SPILLWAY</span> <button onclick="openParamInfo('spillway')" class="ml-1 text-rose-300 hover:text-rose-100 text-[11px] cursor-pointer" title="Formula &amp; penjelasan parameter"><i class="fa-solid fa-circle-info"></i></button></span>
+                                <span id="lbl-spillway" class="text-white">10% (Terkendali)</span>
                             </div>
                             <input type="range" id="slider-spillway" min="0" max="100" value="10" oninput="onSliderChange()" class="w-full accent-rose-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
                         </div>
@@ -508,61 +560,62 @@
                 </div>
 
                 <!-- OUTPUT KEAMANAN & IKK SCORE -->
-                <div class="border-t border-slate-800 pt-3 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div class="p-3 bg-slate-950 rounded-xl border border-cyan-500/40 text-center mb-3 holo-tooltip-container">
-                            <span class="text-[10px] font-tech text-slate-400 block font-bold uppercase">INDEKS KEAMANAN &amp; KEBERLANJUTAN BENDUNGAN (IKK)</span>
-                            <span id="ikk-score" class="font-tech text-3xl md:text-4xl font-black text-cyan-400 glow-text py-1 block">0.86</span>
-                            <span id="ikk-status" class="block text-xs font-mono font-bold text-emerald-400 mt-0.5 uppercase tracking-wider">KONDISI AMAN (NORMAL OPERATION)</span>
-                            <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-cyan-400"></i> Multi-Criteria Dam Safety &amp; Reliability Index [0.0 - 1.0]</div>
+                <div class="border-t border-slate-800 pt-2 flex flex-col">
+                    <div class="p-2 bg-slate-950 rounded-xl border border-cyan-500/40 flex items-center justify-between px-3 mb-2 holo-tooltip-container">
+                        <div>
+                            <span class="text-[9.5px] font-tech text-slate-400 block font-bold uppercase" id="lblIkkBoxTitle">INDEKS KEAMANAN WADUK (IKK)</span>
+                            <span id="ikk-status" class="block text-[10.5px] font-mono font-bold text-emerald-400 uppercase tracking-wider">KONDISI AMAN (NORMAL OPERATION)</span>
+                        </div>
+                        <span id="ikk-score" class="font-tech text-2xl sm:text-3xl font-black text-cyan-400 glow-text">0.86</span>
+                        <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-cyan-400"></i> Multi-Criteria Dam Safety &amp; Reliability Index [0.0 - 1.0]</div>
+                    </div>
+
+                    <!-- METRIC PROGRESS BARS -->
+                    <div class="space-y-1.5 text-[11px] font-bold text-[var(--text-main)] font-mono">
+                        <div>
+                            <div class="flex justify-between mb-0.5">
+                                <span class="text-[10px] sm:text-[11px]" id="lblSfTitle">FAKTOR KEAMANAN STRUKTUR (SF)</span>
+                                <span id="val-sf" class="text-emerald-400 text-[10px] sm:text-[11px]">1.82 (Stabil &gt; 1.5)</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-1.5 sm:h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="bar-sf" class="h-full bg-emerald-500 transition-all duration-500" style="width: 88%"></div>
+                            </div>
                         </div>
 
-                        <!-- METRIC PROGRESS BARS -->
-                        <div class="space-y-2.5 text-xs font-bold text-[var(--text-main)] font-mono">
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-[11px]">FAKTOR KEAMANAN STRUKTUR (SF)</span>
-                                    <span id="val-sf" class="text-emerald-400">1.82 (Stabil &gt; 1.5)</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                                    <div id="bar-sf" class="h-full bg-emerald-500 transition-all duration-500" style="width: 88%"></div>
-                                </div>
+                        <div>
+                            <div class="flex justify-between mb-0.5">
+                                <span class="text-[10px] sm:text-[11px]" id="lblFloodCapTitle">KAPASITAS TAMPUNG BANJIR TERSISA</span>
+                                <span id="val-flood-cap" class="text-cyan-400 text-[10px] sm:text-[11px]">68% Tersedia</span>
                             </div>
-
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-[11px]">KAPASITAS TAMPUNG BANJIR TERSISA</span>
-                                    <span id="val-flood-cap" class="text-cyan-400">68% Tersedia</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                                    <div id="bar-flood-cap" class="h-full bg-cyan-500 transition-all duration-500" style="width: 68%"></div>
-                                </div>
+                            <div class="w-full bg-slate-900 h-1.5 sm:h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="bar-flood-cap" class="h-full bg-cyan-500 transition-all duration-500" style="width: 68%"></div>
                             </div>
+                        </div>
 
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-[11px]">EFISIENSI OUTPUT PLTA</span>
-                                    <span id="val-plta" class="text-amber-400">58.4 MW (96% Target)</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                                    <div id="bar-plta" class="h-full bg-amber-500 transition-all duration-500" style="width: 96%"></div>
-                                </div>
+                        <div>
+                            <div class="flex justify-between mb-0.5">
+                                <span class="text-[10px] sm:text-[11px]" id="lblPltaEffTitle">EFISIENSI OUTPUT PLTA</span>
+                                <span id="val-plta" class="text-amber-400 text-[10px] sm:text-[11px]">58.4 MW (96% Target)</span>
                             </div>
+                            <div class="w-full bg-slate-900 h-1.5 sm:h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="bar-plta" class="h-full bg-amber-500 transition-all duration-500" style="width: 96%"></div>
+                            </div>
+                        </div>
 
-                            <div>
-                                <div class="flex justify-between mb-1">
-                                    <span class="text-[11px]">VALUASI KEMANFAATAN AIR &amp; ENERGI</span>
-                                    <span id="val-ekonomi" class="text-emerald-300">Rp 48.2 Miliar/Bulan</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
-                                    <div id="bar-ekonomi" class="h-full bg-emerald-400 transition-all duration-500" style="width: 85%"></div>
-                                </div>
+                        <div>
+                            <div class="flex justify-between mb-0.5">
+                                <span class="text-[10px] sm:text-[11px]" id="lblValuasiEkonomi">VALUASI KEMANFAATAN AIR &amp; ENERGI</span>
+                                <span id="val-ekonomi" class="text-emerald-300 text-[10px] sm:text-[11px]">Rp 48.2 Miliar/Bulan</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-1.5 sm:h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="bar-ekonomi" class="h-full bg-emerald-400 transition-all duration-500" style="width: 85%"></div>
                             </div>
                         </div>
                     </div>
 
-                    <button type="button" onclick="triggerAnalisisAlgoritma()" class="w-full mt-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white font-black py-2.5 rounded-xl uppercase font-tech text-xs tracking-wider shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-microchip"></i> <span>RENDER SIMULASI SPASIAL-DINAMIS</span>
+                    <!-- TOMBOL RENDER SIMULASI SPASIAL-DINAMIS: PERSIS DI BAWAH VALUASI KEMANFAATAN AIR & ENERGI -->
+                    <button type="button" onclick="triggerAnalisisAlgoritma()" class="w-full mt-2.5 py-2.5 px-3 rounded-xl font-tech font-black text-xs md:text-sm text-white bg-gradient-to-r from-[#0066cc] via-[#0088ff] to-[#00b4d8] hover:from-[#0052a3] hover:to-[#0096c7] border border-cyan-300/50 shadow-[0_0_20px_rgba(0,180,216,0.45)] hover:shadow-[0_0_25px_rgba(0,180,216,0.7)] flex items-center justify-center gap-2.5 transition-all transform hover:scale-[1.01] active:scale-[0.99] cursor-pointer tracking-wider">
+                        <i class="fa-solid fa-microchip text-sm text-white"></i> <span id="btnRenderSimText">RENDER SIMULASI SPASIAL-DINAMIS</span>
                     </button>
                 </div>
             </section>
@@ -1242,9 +1295,19 @@
                     <p class="text-emerald-400 text-[11px]">Kondisi Tenang (Di Bawah Ambang Kritis 0.20g)</p>
                 </div>
                 <div class="space-y-2 text-slate-300">
-                    <div class="flex justify-between"><span>Magnitudo Gempa Historis Maks:</span><span class="text-rose-400 font-bold">M 7.4 (Palu 2018) / M 7.0 (Kerinci 1995)</span></div>
-                    <div class="flex justify-between"><span>Pergeseran Sesar Rata-rata:</span><span class="text-cyan-400 font-bold">25 – 35 mm/tahun</span></div>
-                    <div class="flex justify-between"><span>Status Likuefaksi Fondasi:</span><span class="text-emerald-400 font-bold">Resiko Sangat Rendah</span></div>
+                    <div class="flex justify-between"><span id="lblMagSeismik">Magnitudo Gempa Historis Maks:</span><span class="text-rose-400 font-bold">M 7.4 (Palu 2018) / M 7.0 (Kerinci 1995)</span></div>
+                    <div class="flex justify-between"><span id="lblSlipSeismik">Pergeseran Sesar Rata-rata:</span><span class="text-cyan-400 font-bold">25 – 35 mm/tahun</span></div>
+                    <div class="flex justify-between"><span id="lblLiqSeismik">Status Likuefaksi Fondasi:</span><span class="text-emerald-400 font-bold" id="valLiqSeismik">Resiko Sangat Rendah</span></div>
+                </div>
+
+                <!-- TOMBOL INTEGRASI INATEWS & SEISMIC SITE REPORT -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3 border-t border-slate-800">
+                    <a href="https://adikds-byte.github.io/InaTEWS-Pro-v45/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-red-950 via-rose-900 to-slate-900 border border-rose-500/70 hover:border-rose-400 text-rose-200 hover:text-white font-mono text-[11px] font-bold shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
+                        <i class="fa-solid fa-water text-cyan-400 animate-pulse"></i> <span id="btnInaTews">Monitoring Gempa &amp; Tsunami</span> <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400"></i>
+                    </a>
+                    <a href="https://adikds-byte.github.io/Seismic_Site_Report_Pro/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-950 via-indigo-900 to-slate-900 border border-blue-500/70 hover:border-blue-400 text-cyan-200 hover:text-white font-mono text-[11px] font-bold shadow-lg transition-all hover:scale-[1.02] cursor-pointer">
+                        <i class="fa-solid fa-file-waveform text-amber-400 animate-pulse"></i> <span id="btnSeismicReport">Seismic Site Report</span> <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1279,21 +1342,40 @@
     </div>
 
     <!-- MODAL 7: TIM PENGEMBANG & PENELITI -->
-    <div id="creatorModal" class="fixed inset-0 z-[110] hidden bg-black/70 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div id="creatorModal" class="fixed inset-0 z-[110] hidden bg-black/75 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl w-full max-w-md p-6 relative shadow-2xl font-sans text-xs max-h-[90vh] overflow-y-auto custom-scrollbar">
             <button onclick="closeCreatorModal()" class="absolute top-3 right-4 text-slate-400 hover:text-white text-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center pb-3 border-b border-slate-800 mb-3">
                 <h3 class="text-base font-black font-tech text-cyan-400 mt-1">DAM DECISION SUPPORT SYSTEM (DAM-DSS)</h3>
-                <p class="font-mono font-bold text-slate-300 mt-0.5">Sistem Pengambilan Keputusan Bendungan Cerdas</p>
-                <p class="text-[11px] bg-slate-800 inline-block px-3 py-1 rounded-full text-slate-300 mt-1.5">Studi Kasus: Bendungan Poso-1 (Sulteng) &amp; Bendungan Kerinci (Jambi)</p>
+                <p class="font-mono font-bold text-slate-300 mt-0.5" id="lblDevSubTitle">Sistem Pengambilan Keputusan Bendungan Cerdas</p>
+                <p class="text-[11px] bg-slate-800 inline-block px-3 py-1 rounded-full text-slate-300 mt-1.5" id="lblDevCaseStudy">Studi Kasus: Bendungan Poso-1 (Sulteng) &amp; Bendungan Kerinci (Jambi)</p>
             </div>
-            <div class="text-slate-300 leading-relaxed text-center mb-3 font-mono">
+            <div class="text-slate-300 leading-relaxed text-center mb-3 font-mono" id="lblDevIntro">
                 Integrasi Komputasi Hidrologi, Analisis Stabilitas Struktur Geoteknik, dan Kecerdasan Buatan untuk Manajemen Keamanan Bendungan Nasional.
             </div>
             <div class="pt-3 border-t border-slate-700 text-center font-mono">
-                <p class="text-cyan-400 font-bold uppercase font-tech mb-1"><i class="fa-solid fa-laptop-code"></i> Dam Engineering &amp; AI System Developer</p>
-                <p class="text-white font-bold text-sm">Ir. Mohamad Hartadi</p>
-                <p class="text-[10px] text-slate-400 mb-2">Civil &amp; Water Resources Engineer | AI System Architect</p>
+                <p class="text-cyan-400 font-bold uppercase font-tech mb-1.5 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-laptop-code text-cyan-400"></i> <span id="lblDevRoleTitle">Dam Engineering &amp; AI System Developer</span>
+                </p>
+                
+                <h4 class="text-white font-bold text-base tracking-wide">Ir. Mohamad Hartadi</h4>
+                
+                <!-- BADGES SESUAI FOTO ca4ebc -->
+                <div class="flex items-center justify-center gap-2 flex-wrap my-2">
+                    <span class="bg-amber-950/90 text-amber-300 border border-amber-500/60 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-code text-amber-400"></i> AI Developer
+                    </span>
+                    <span class="bg-emerald-950/90 text-emerald-300 border border-emerald-500/60 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-certificate text-emerald-400"></i> SKA Ahli Utama Bendungan Besar
+                    </span>
+                </div>
+                <p class="text-[11px] text-cyan-300/80 mb-3 font-medium">Civil &amp; Water Resources Engineer | AI System Architect</p>
+
+                <!-- DESKRIPSI SESUAI FOTO ca4e75 -->
+                <div class="bg-slate-950/85 border border-slate-800 rounded-xl p-3.5 text-left mb-3 text-slate-200 text-[11px] leading-relaxed shadow-inner">
+                    <p class="text-slate-300" id="lblDevBio">Pengembang dan perancang sistem integrasi komputasi rekayasa geoteknik tambang, pemodelan numerik lereng bendungan tailing (TSF), dinamika hidraulik pantai, serta otomatisasi analisis keselamatan bendungan dan pengujian laboratorium mekanika tanah.</p>
+                </div>
+
                 <div class="flex justify-center items-center gap-3 mb-2">
                     <a href="https://www.facebook.com/m.hartadi" target="_blank" class="w-8 h-8 rounded-full bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:border-blue-500 transition-colors" title="Facebook"><i class="fa-brands fa-facebook-f text-sm"></i></a>
                     <a href="https://newbieonline7.blogspot.com/" target="_blank" class="w-8 h-8 rounded-full bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 hover:text-amber-500 hover:border-amber-500 transition-colors" title="Blog"><i class="fa-brands fa-blogger-b text-sm"></i></a>
@@ -1305,7 +1387,6 @@
             </div>
         </div>
     </div>
-
     <!-- MODAL 8: VOICE SETTINGS -->
     <div id="voiceSettingsModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl w-full max-w-sm p-5 shadow-2xl relative font-sans text-xs">
@@ -2310,6 +2391,14 @@ function proSwitchTab(tab) {
     });
     document.getElementById(`proPane-${tab}`).classList.remove('hidden');
     document.getElementById(`proTabBtn-${tab}`).className = "px-2.5 py-1 rounded bg-cyan-700 text-white font-bold transition-all cursor-pointer text-[11px]";
+    setTimeout(() => {
+        if (tab === 'routing') proRunRouting();
+        else if (tab === 'stability') proRunStability();
+        else if (tab === 'sediment') proRunSediment();
+        else if (tab === 'ahp') proRunAhp();
+        else if (tab === 'mc') proRunMC();
+        else if (tab === 'cba') proRunCBA();
+    }, 60);
 }
 
 let studioCharts = {};
@@ -2360,10 +2449,10 @@ function proRunRouting() {
 }
 
 function proRunStability() {
-    const c = parseFloat(document.getElementById('proStabC').value);
-    const phi = parseFloat(document.getElementById('proStabPhi').value);
-    const ru = parseFloat(document.getElementById('proStabRu').value);
-    const kh = parseFloat(document.getElementById('proStabKh').value);
+    const c = parseFloat(document.getElementById('proStabC').value) || 35;
+    const phi = parseFloat(document.getElementById('proStabPhi').value) || 32;
+    const ru = parseFloat(document.getElementById('proStabRu').value) || 0.25;
+    const kh = parseFloat(document.getElementById('proStabKh').value) || 0.21;
 
     const res = DAM_DSS_PRO.stability(c, phi, ru, kh);
     document.getElementById('proStabOut').innerHTML = `
@@ -2374,23 +2463,64 @@ function proRunStability() {
     `;
 
     const ctx = document.getElementById('proStabChart');
-    if (!ctx) return;
-    if (studioCharts.stability) studioCharts.stability.destroy();
-    studioCharts.stability = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['SF Statis', 'SF Gempa k_h=0.21', 'Standar ICOLD Statis', 'Standar ICOLD Gempa'],
-            datasets: [{ label: 'Faktor Keamanan', data: [res.staticSF, res.pseudoSF, 1.50, 1.20], backgroundColor: ['#10b981', '#06b6d4', '#475569', '#475569'] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
+    if (ctx) {
+        if (studioCharts.stability) studioCharts.stability.destroy();
+        studioCharts.stability = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['SF Statis', 'SF Gempa kh=' + kh, 'Standar ICOLD Statis', 'Standar ICOLD Gempa'],
+                datasets: [{
+                    label: 'Faktor Keamanan',
+                    data: [res.staticSF, res.pseudoSF, 1.50, 1.20],
+                    backgroundColor: ['#10b981', '#06b6d4', '#475569', '#475569'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { size: 9 } } },
+                    y: { min: 0, max: 2.5, ticks: { color: '#94a3b8', font: { size: 9 } }, title: { display: true, text: 'Safety Factor (SF)', color: '#94a3b8' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    // Chart Spektrum Respon Seismik
+    const ctxSeis = document.getElementById('proSeismicChart');
+    if (ctxSeis) {
+        if (studioCharts.seismic) studioCharts.seismic.destroy();
+        const periods = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.5, 2.0];
+        const saPoso = periods.map(T => +(0.42 * (T < 0.2 ? (1 + 1.5 * (T / 0.2)) : (T < 0.6 ? 2.5 : 2.5 * (0.6 / T)))).toFixed(2));
+        const saKerinci = periods.map(T => +(0.45 * (T < 0.2 ? (1 + 1.5 * (T / 0.2)) : (T < 0.6 ? 2.5 : 2.5 * (0.6 / T)))).toFixed(2));
+
+        studioCharts.seismic = new Chart(ctxSeis, {
+            type: 'line',
+            data: {
+                labels: periods.map(p => `${p}s`),
+                datasets: [
+                    { label: 'Spektrum Poso-1 (Sesar Palu-Koro PGA 0.42g)', data: saPoso, borderColor: '#38bdf8', borderWidth: 2, tension: 0.35, pointRadius: 2.5 },
+                    { label: 'Spektrum Kerinci (Sesar Semangko PGA 0.45g)', data: saKerinci, borderColor: '#f43f5e', borderWidth: 2, tension: 0.35, pointRadius: 2.5 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#f8fafc', font: { size: 8.5 } } } },
+                scales: {
+                    x: { title: { display: true, text: 'Periode Alami Getar T (detik)', color: '#94a3b8' }, ticks: { color: '#94a3b8', font: { size: 9 } } },
+                    y: { title: { display: true, text: 'Percepatan Spektral Sa (g)', color: '#94a3b8' }, ticks: { color: '#94a3b8', font: { size: 9 } } }
+                }
+            }
+        });
+    }
 }
 
 function proRunSediment() {
-    const ero = parseFloat(document.getElementById('proSedErosion').value);
-    const area = parseFloat(document.getElementById('proSedArea').value);
-    const dead = parseFloat(document.getElementById('proSedDead').value);
-    const flush = parseFloat(document.getElementById('proSedFlush').value);
+    const ero = parseFloat(document.getElementById('proSedErosion').value) || 28;
+    const area = parseFloat(document.getElementById('proSedArea').value) || 1800;
+    const dead = parseFloat(document.getElementById('proSedDead').value) || 85;
+    const flush = parseFloat(document.getElementById('proSedFlush').value) || 45;
 
     const s = DAM_DSS_PRO.sediment(ero, area, dead, flush);
     document.getElementById('proSedOut').innerHTML = `
@@ -2399,11 +2529,96 @@ function proRunSediment() {
             <div class="bg-slate-950 border border-slate-800 rounded p-1.5"><span class="text-slate-400">Estimasi Umur Waduk</span><br><b class="text-emerald-400 text-base">${s.usefulLifeYears} Tahun</b></div>
         </div>
     `;
+
+    // 1. Chart Neraca Komponen Sedimen Tahunan
+    const ctx1 = document.getElementById('proSedChart');
+    if (ctx1) {
+        if (studioCharts.sediment) studioCharts.sediment.destroy();
+        const totalInflowSed = s.sedVolPerYear;
+        const flushedSed = totalInflowSed * (flush / 100);
+        const trappedSed = s.netSedPerYear;
+        const passedSed = totalInflowSed * 0.12;
+
+        studioCharts.sediment = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Inflow Sedimen', 'Terperangkap (Net)', 'Terbilas Flushing', 'Lolos ke Hilir'],
+                datasets: [{
+                    label: 'Volume Sedimen Tahunan (Juta m³/th)',
+                    data: [totalInflowSed, trappedSed, flushedSed, passedSed],
+                    backgroundColor: ['#38bdf8', '#f59e0b', '#10b981', '#a855f7'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: (ctx) => ` ${ctx.parsed.y.toFixed(2)} Juta m³/tahun` } }
+                },
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { size: 9 } } },
+                    y: { title: { display: true, text: 'Volume (Jt m³/th)', color: '#94a3b8' }, ticks: { color: '#94a3b8', font: { size: 9 } } }
+                }
+            }
+        });
+    }
+
+    // 2. Chart Proyeksi Akumulasi Sedimen vs Dead Storage (100 Tahun)
+    const ctx2 = document.getElementById('proSedLifeChart');
+    if (ctx2) {
+        if (studioCharts.sedLife) studioCharts.sedLife.destroy();
+        const years = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        const deadCapLine = years.map(() => dead);
+        const accumNoFlush = years.map(y => +(y * s.sedVolPerYear).toFixed(1));
+        const accumWithFlush = years.map(y => +(y * s.netSedPerYear).toFixed(1));
+        const remCap = years.map(y => +Math.max(0, dead - (y * s.netSedPerYear)).toFixed(1));
+
+        studioCharts.sedLife = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: years.map(y => `Th ${y}`),
+                datasets: [
+                    { label: 'Batas Tampungan Mati (Dead Storage)', data: deadCapLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2 },
+                    { label: 'Akumulasi Tanpa Flushing (0%)', data: accumNoFlush, borderColor: '#f87171', tension: 0.25, borderWidth: 2 },
+                    { label: `Akumulasi dengan Flushing (${flush}%)`, data: accumWithFlush, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.25, borderWidth: 2 },
+                    { label: 'Sisa Tampungan Mati Efektif', data: remCap, borderColor: '#10b981', tension: 0.25, borderWidth: 2 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#f8fafc', font: { size: 9 } } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { size: 9 } } },
+                    y: { title: { display: true, text: 'Volume (Juta m³)', color: '#94a3b8' }, ticks: { color: '#94a3b8', font: { size: 9 } } }
+                }
+            }
+        });
+    }
 }
 
 function proRunAhp() {
+    // Populate AHP Saaty Matrix Table
+    const matrixBox = document.getElementById('proAhpMatrix');
+    if (matrixBox) {
+        matrixBox.innerHTML = `
+            <div class="overflow-x-auto rounded border border-slate-800">
+                <table class="w-full text-[9.5px] font-mono border-collapse text-center">
+                    <tr class="bg-slate-950 text-cyan-400 border-b border-slate-800">
+                        <th class="p-1 text-left">Kriteria</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th class="text-amber-300">Bobot</th>
+                    </tr>
+                    <tr class="border-b border-slate-900"><td class="p-1 text-left font-bold text-slate-300">C1. Keamanan</td><td>1.0</td><td>2.0</td><td>2.0</td><td>3.0</td><td>4.0</td><td class="font-bold text-cyan-400">0.32</td></tr>
+                    <tr class="border-b border-slate-900"><td class="p-1 text-left font-bold text-slate-300">C2. Banjir EAP</td><td>0.5</td><td>1.0</td><td>1.0</td><td>3.0</td><td>3.0</td><td class="font-bold text-cyan-400">0.24</td></tr>
+                    <tr class="border-b border-slate-900"><td class="p-1 text-left font-bold text-slate-300">C3. PLTA Listrik</td><td>0.5</td><td>1.0</td><td>1.0</td><td>2.0</td><td>3.0</td><td class="font-bold text-cyan-400">0.22</td></tr>
+                    <tr class="border-b border-slate-900"><td class="p-1 text-left font-bold text-slate-300">C4. Konservasi</td><td>0.33</td><td>0.33</td><td>0.5</td><td>1.0</td><td>2.0</td><td class="font-bold text-cyan-400">0.12</td></tr>
+                    <tr><td class="p-1 text-left font-bold text-slate-300">C5. Finansial</td><td>0.25</td><td>0.33</td><td>0.33</td><td>0.5</td><td>1.0</td><td class="font-bold text-cyan-400">0.10</td></tr>
+                </table>
+            </div>
+        `;
+    }
+
     document.getElementById('proAhpOut').innerHTML = `
-        <span class="px-2 py-0.5 bg-emerald-900 border border-emerald-700 text-emerald-400 rounded font-mono text-[10px] font-bold">CR = 0.042 — KONSISTEN (&lt; 0.10)</span>
+        <span class="px-2 py-0.5 bg-emerald-900/80 border border-emerald-700 text-emerald-300 rounded font-mono text-[10px] font-bold">CR = 0.042 — KONSISTEN (&lt; 0.10)</span>
     `;
 
     document.getElementById('proTopsisOut').innerHTML = `
@@ -2415,9 +2630,72 @@ function proRunAhp() {
             <tr class="text-slate-400"><td>4</td><td>Skenario 4: Darurat Seismik</td><td class="text-right">0.590</td></tr>
         </table>
     `;
+
+    // 1. Chart Radar Bobot AHP
+    const ctxAhp = document.getElementById('proAhpChart');
+    if (ctxAhp) {
+        if (studioCharts.ahp) studioCharts.ahp.destroy();
+        studioCharts.ahp = new Chart(ctxAhp, {
+            type: 'radar',
+            data: {
+                labels: ['Keamanan Struktur', 'Pengendalian Banjir', 'Pembangkit PLTA', 'Konservasi Danau', 'Finansial & O&M'],
+                datasets: [{
+                    label: 'Bobot Prioritas AHP',
+                    data: [0.32, 0.24, 0.22, 0.12, 0.10],
+                    backgroundColor: 'rgba(6, 182, 212, 0.25)',
+                    borderColor: '#06b6d4',
+                    pointBackgroundColor: '#22d3ee',
+                    pointBorderColor: '#fff',
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { color: '#cbd5e1', font: { size: 9 } },
+                        ticks: { backdropColor: 'transparent', color: '#94a3b8', font: { size: 8 } }
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    // 2. Chart Bar Ranking TOPSIS
+    const ctxTopsis = document.getElementById('proTopsisChart');
+    if (ctxTopsis) {
+        if (studioCharts.topsis) studioCharts.topsis.destroy();
+        studioCharts.topsis = new Chart(ctxTopsis, {
+            type: 'bar',
+            data: {
+                labels: ['Sk. 1: Normal Peaking', 'Sk. 2: Siaga Banjir', 'Sk. 3: Kemarau', 'Sk. 4: Darurat Gempa'],
+                datasets: [{
+                    label: 'Skor Closeness TOPSIS (C*)',
+                    data: [0.865, 0.742, 0.680, 0.590],
+                    backgroundColor: ['#10b981', '#06b6d4', '#f59e0b', '#f43f5e'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { min: 0, max: 1.0, ticks: { color: '#94a3b8', font: { size: 9 } }, title: { display: true, text: 'Koefisien Kedekatan Relatif C*', color: '#94a3b8' } },
+                    y: { ticks: { color: '#cbd5e1', font: { size: 9 } } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
 }
 
 function proRunMC() {
+    const n = parseInt(document.getElementById('proMcN').value) || 1000;
+    const j = parseFloat(document.getElementById('proMcJ').value) || 25;
+
     document.getElementById('proMcOut').innerHTML = `
         <div class="grid grid-cols-4 gap-2 text-center text-[10px] font-mono">
             <div class="bg-slate-950 border border-slate-800 rounded p-1.5"><span class="text-slate-400">P10 Inflow Rendah</span><br><b class="text-amber-400 text-sm">62 m³/s</b></div>
@@ -2426,6 +2704,82 @@ function proRunMC() {
             <div class="bg-slate-950 border border-emerald-800 rounded p-1.5"><span class="text-slate-400">P(Overtopping)</span><br><b class="text-emerald-400 text-sm">0.02% (Aman)</b></div>
         </div>
     `;
+
+    // 1. Chart Histogram Distribusi Inflow Monte Carlo
+    const ctxMc = document.getElementById('proMcChart');
+    if (ctxMc) {
+        if (studioCharts.mc) studioCharts.mc.destroy();
+        studioCharts.mc = new Chart(ctxMc, {
+            type: 'bar',
+            data: {
+                labels: ['<60', '60-100', '100-140', '140-180', '180-220', '220-260', '260-300', '300-350', '>350 m³/s'],
+                datasets: [{
+                    label: 'Frekuensi Iterasi (Jumlah Run dari 1000)',
+                    data: [35, 120, 280, 310, 145, 65, 30, 12, 3],
+                    backgroundColor: 'rgba(56, 189, 248, 0.65)',
+                    borderColor: '#38bdf8',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { size: 8.5 } }, title: { display: true, text: 'Rentang Inflow Banjir (m³/s)', color: '#94a3b8' } },
+                    y: { ticks: { color: '#94a3b8', font: { size: 9 } }, title: { display: true, text: 'Frekuensi Runs', color: '#94a3b8' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    // 2. Chart Diagram Tornado Sensitivitas IKK
+    const ctxTornado = document.getElementById('proTornadoChart');
+    if (ctxTornado) {
+        if (studioCharts.tornado) studioCharts.tornado.destroy();
+        studioCharts.tornado = new Chart(ctxTornado, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Koefisien Gempa PGA kh',
+                    'Inflow Banjir Ekstrem Q_peak',
+                    'Tekanan Air Pori Fondasi ru',
+                    'Bukaan Pintu Spillway',
+                    'Head Efektif PLTA',
+                    'Laju Erosi DTA'
+                ],
+                datasets: [
+                    {
+                        label: 'Penurunan IKK (-15%)',
+                        data: [-0.14, -0.11, -0.09, -0.07, -0.05, -0.04],
+                        backgroundColor: '#f43f5e',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Peningkatan IKK (+15%)',
+                        data: [0.04, 0.08, 0.06, 0.11, 0.06, 0.03],
+                        backgroundColor: '#10b981',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        ticks: { color: '#94a3b8', font: { size: 9 } },
+                        title: { display: true, text: 'Sensitivitas Perubahan Indeks IKK', color: '#94a3b8' },
+                        grid: { color: 'rgba(255,255,255,0.08)' }
+                    },
+                    y: { ticks: { color: '#cbd5e1', font: { size: 9.5 } } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#f8fafc', font: { size: 9.5 } } }
+                }
+            }
+        });
+    }
 }
 
 function proRunCBA() {
@@ -2443,8 +2797,211 @@ function proRunCBA() {
             </tr>
         </table>
     `;
+
+    // Chart Cash Flow & Kumulatif NPV 25 Tahun
+    const ctxCba = document.getElementById('proCbaChart');
+    if (ctxCba) {
+        if (studioCharts.cba) studioCharts.cba.destroy();
+        const years = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 22, 25];
+        const r = 0.08;
+        const opex = cba.capex * 0.025;
+        const netCashAnnual = cba.annualRevenue - opex;
+
+        let cum = -cba.capex;
+        const discCashArr = [];
+        const cumNpvArr = [];
+
+        for (let t = 1; t <= 25; t++) {
+            const disc = netCashAnnual / Math.pow(1 + r, t);
+            cum += disc;
+            if (years.includes(t)) {
+                discCashArr.push(+disc.toFixed(1));
+                cumNpvArr.push(+cum.toFixed(1));
+            }
+        }
+
+        studioCharts.cba = new Chart(ctxCba, {
+            data: {
+                labels: years.map(y => `Th ${y}`),
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Arus Kas Bersih Terdiskonto (Miliar Rp)',
+                        data: discCashArr,
+                        backgroundColor: 'rgba(245, 158, 11, 0.65)',
+                        borderColor: '#f59e0b',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'Nilai Bersih Kumulatif NPV (Miliar Rp)',
+                        data: cumNpvArr,
+                        borderColor: '#06b6d4',
+                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 2.5,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#f8fafc', font: { size: 9.5 } } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8', font: { size: 9 } } },
+                    y: {
+                        title: { display: true, text: 'Cash Flow Tahunan (Miliar Rp)', color: '#f59e0b' },
+                        ticks: { color: '#f59e0b', font: { size: 9 } },
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    },
+                    y1: {
+                        position: 'right',
+                        title: { display: true, text: 'Kumulatif NPV (Miliar Rp)', color: '#06b6d4' },
+                        ticks: { color: '#06b6d4', font: { size: 9 } },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
+            }
+        });
+    }
 }
 
+// -------------------------------------------------------------
+// FONT SIZE SCALING & BILINGUAL TRANSLATION (ID <-> EN)
+// -------------------------------------------------------------
+let currentFontScaleIndex = 0;
+const fontScaleLevels = [
+    { scale: 1.0, labelId: "HURUF: 100%", labelEn: "FONT: 100%" },
+    { scale: 1.15, labelId: "HURUF: 115%", labelEn: "FONT: 115%" },
+    { scale: 1.30, labelId: "HURUF: 130%", labelEn: "FONT: 130%" }
+];
+
+function toggleFontSize() {
+    currentFontScaleIndex = (currentFontScaleIndex + 1) % fontScaleLevels.length;
+    const lvl = fontScaleLevels[currentFontScaleIndex];
+    document.documentElement.style.setProperty('--app-font-scale', lvl.scale);
+    const lbl = document.getElementById('fontZoomLabel');
+    if (lbl) {
+        lbl.innerText = currentLanguage === 'id' ? lvl.labelId : lvl.labelEn;
+    }
+    toastNotifikasi(currentLanguage === 'id' ? `Ukuran huruf disesuaikan: ${(lvl.scale * 100).toFixed(0)}%` : `Font size adjusted: ${(lvl.scale * 100).toFixed(0)}%`, 'fa-text-height');
+}
+
+let currentLanguage = 'id';
+const I18N = {
+    id: {
+        syncStatus: "Pemodelan Hidrologi & Routing Waduk · Keamanan Struktur · Alokasi Multi-Guna PLTA Poso-1 & Kerinci",
+        lblTmaHeader: "ELEVASI (TMA)",
+        lblInflowHeader: "INFLOW DAS",
+        lblOutflowHeader: "OUTFLOW / TURBIN",
+        lblIkkHeader: "INDEKS IKK",
+        tipTmaHeader: "Tinggi Muka Air Waduk Normal",
+        tipInflowHeader: "Debit Masuk Sungai & DTA Danau",
+        tipOutflowHeader: "Pelepasan Turbin PLTA & Spillway",
+        tipIkkHeader: "Indeks Keamanan & Keberlanjutan Bendungan",
+        btnHeaderScenarios: "SKENARIO OPERASI",
+        btnHeaderEap: "RTD & SOP EAP",
+        btnHeaderTechSpec: "SPESIFIKASI TEKNIK",
+        btnHeaderVault: "G-DRIVE VAULT",
+        btnHeaderTeam: "TIM PENGEMBANG",
+        tipDamSelect: "Pilih Lokasi Bendungan",
+        tipHeaderScenarios: "Bandingkan 4 Skenario Pola Operasi",
+        tipHeaderEap: "Rencana Tindak Darurat & Mitigasi",
+        tipHeaderTechSpec: "Data Teknis & Instrumentasi",
+        tipHeaderVault: "Arsip Dokumen As-Built & Laporan",
+        tipHeaderTeam: "Profil Tim Peneliti & Pengembang",
+        tipHeaderZoom: "Perbesar / Perkecil Huruf Teks Dasbor",
+        tipHeaderTrans: "Terjemahkan (Bahasa Indonesia / English)",
+        tipHeaderTheme: "Beralih Tema Gelap / Terang",
+        lblSimTitle: "Simulator Hidrodinamika",
+        lblSelectScenario: "PILIH SKENARIO PENGOPERASIAN WADUK:",
+        lblSliderInflow: "INFLOW DAS (Q_in)",
+        lblSliderTma: "ELEVASI AWAL (TMA)",
+        lblSliderTurbin: "DEBIT TURBIN PLTA",
+        lblSliderSpillway: "BUKAAN SPILLWAY",
+        lblIkkBoxTitle: "INDEKS KEAMANAN WADUK (IKK)",
+        lblSfTitle: "FAKTOR KEAMANAN STRUKTUR (SF)",
+        lblFloodCapTitle: "KAPASITAS TAMPUNG BANJIR TERSISA",
+        lblPltaEffTitle: "EFISIENSI OUTPUT PLTA",
+        lblValuasiEkonomi: "VALUASI KEMANFAATAN AIR & ENERGI",
+        btnRenderSimText: "RENDER SIMULASI SPASIAL-DINAMIS",
+        btnInaTews: "Monitoring Gempa & Tsunami",
+        btnSeismicReport: "Seismic Site Report",
+        lblMagSeismik: "Magnitudo Gempa Historis Maks:",
+        lblSlipSeismik: "Pergeseran Sesar Rata-rata:",
+        lblLiqSeismik: "Status Likuefaksi Fondasi:",
+        valLiqSeismik: "Resiko Sangat Rendah"
+    },
+    en: {
+        syncStatus: "Reservoir Hydrology & Routing · Structural Safety · Multi-Purpose Hydropower Allocation Poso-1 & Kerinci",
+        lblTmaHeader: "WATER LEVEL (WSE)",
+        lblInflowHeader: "BASIN INFLOW",
+        lblOutflowHeader: "TOTAL OUTFLOW",
+        lblIkkHeader: "IKK SAFETY INDEX",
+        tipTmaHeader: "Normal Reservoir Water Surface Elevation",
+        tipInflowHeader: "Basin & Lake Catchment Inflow Discharge",
+        tipOutflowHeader: "Hydropower Turbine & Spillway Discharge",
+        tipIkkHeader: "Multi-Criteria Dam Safety & Sustainability Index",
+        btnHeaderScenarios: "OPERATION SCENARIOS",
+        btnHeaderEap: "EAP & DAM SAFETY SOP",
+        btnHeaderTechSpec: "TECH SPECS",
+        btnHeaderVault: "G-DRIVE VAULT",
+        btnHeaderTeam: "DEV TEAM",
+        tipDamSelect: "Select Dam Study Location",
+        tipHeaderScenarios: "Compare 4 Reservoir Operation Scenarios",
+        tipHeaderEap: "Emergency Action Plan & Mitigation",
+        tipHeaderTechSpec: "Technical Specs & Field Instrumentation",
+        tipHeaderVault: "As-Built Documents & Engineering Vault",
+        tipHeaderTeam: "Research Team & Developers Profile",
+        tipHeaderZoom: "Zoom Dashboard Text Font Size",
+        tipHeaderTrans: "Translate (Indonesian / English)",
+        tipHeaderTheme: "Toggle Dark / Light Theme",
+        lblSimTitle: "Hydrodynamic Simulator",
+        lblSelectScenario: "SELECT RESERVOIR OPERATION SCENARIO:",
+        lblSliderInflow: "BASIN INFLOW (Q_in)",
+        lblSliderTma: "INITIAL WATER LEVEL (WSE)",
+        lblSliderTurbin: "HYDROPOWER TURBINE DISCHARGE",
+        lblSliderSpillway: "SPILLWAY GATE OPENING",
+        lblIkkBoxTitle: "DAM SAFETY INDEX (IKK)",
+        lblSfTitle: "STRUCTURAL SAFETY FACTOR (SF)",
+        lblFloodCapTitle: "REMAINING FLOOD CAPACITY",
+        lblPltaEffTitle: "HYDROPOWER EFFICIENCY",
+        lblValuasiEkonomi: "WATER & ENERGY ECONOMIC VALUATION",
+        btnRenderSimText: "RENDER SPATIAL-DYNAMIC SIMULATION",
+        btnInaTews: "Earthquake & Tsunami Monitoring",
+        btnSeismicReport: "Seismic Site Report",
+        lblMagSeismik: "Max Historical Magnitude:",
+        lblSlipSeismik: "Average Fault Slip Rate:",
+        lblLiqSeismik: "Foundation Liquefaction Status:",
+        valLiqSeismik: "Very Low Risk"
+    }
+};
+
+function toggleLanguage() {
+    currentLanguage = currentLanguage === 'id' ? 'en' : 'id';
+    applyLanguage(currentLanguage);
+}
+
+function applyLanguage(lang) {
+    const dict = I18N[lang];
+    if (!dict) return;
+
+    for (const [id, text] of Object.entries(dict)) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+    }
+
+    const tLabel = document.getElementById('translateLabel');
+    if (tLabel) tLabel.innerText = lang === 'id' ? 'ID ⇄ EN' : 'EN ⇄ ID';
+
+    const fontLvl = fontScaleLevels[currentFontScaleIndex];
+    const fLabel = document.getElementById('fontZoomLabel');
+    if (fLabel) fLabel.innerText = lang === 'id' ? fontLvl.labelId : fontLvl.labelEn;
+
+    toastNotifikasi(lang === 'id' ? 'Bahasa beralih ke Bahasa Indonesia' : 'Language switched to English', 'fa-language');
+}
 // =========================================================================
 // 6. AI CHATBOT & VOICE (WEB SPEECH API)
 // =========================================================================
