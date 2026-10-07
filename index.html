@@ -64,21 +64,130 @@
         .leaflet-top.leaflet-left { top: 85px !important; }
         .audio-speaking { box-shadow: 0 0 15px rgba(6, 182, 212, 0.8); border-color: #06b6d4 !important; }
 
-        .holo-tooltip-container { position: relative; cursor: pointer; }
+        /* ULTRA-LEGIBLE TOOLTIP SYSTEM WITH MOBILE & TABLET ADAPTATION */
+        .holo-tooltip-container {
+            position: relative;
+            cursor: pointer;
+        }
         .holo-tooltip {
-            position: absolute; top: 120%; left: 50%; transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.94); backdrop-filter: blur(12px);
-            border: 1px solid rgba(6, 182, 212, 0.8); box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
-            color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: bold;
-            font-family: 'JetBrains Mono', monospace; white-space: nowrap; opacity: 0; visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; pointer-events: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(6, 14, 30, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid #06b6d4;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 16px rgba(6, 182, 212, 0.5);
+            color: #ffffff;
+            padding: 7px 13px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.4;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 99999;
+            pointer-events: none;
+            text-align: center;
         }
         .holo-tooltip::before {
-            content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-            border-width: 6px; border-style: solid; border-color: transparent transparent rgba(6, 182, 212, 0.8) transparent;
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: transparent transparent #06b6d4 transparent;
         }
+
+        /* Upward Tooltip for bottom items */
+        .holo-tooltip-up .holo-tooltip {
+            top: auto;
+            bottom: calc(100% + 8px);
+        }
+        .holo-tooltip-up .holo-tooltip::before {
+            bottom: auto;
+            top: 100%;
+            border-color: #06b6d4 transparent transparent transparent;
+        }
+
+        /* Right-edge aligned tooltip */
+        .holo-tooltip-right .holo-tooltip {
+            left: auto;
+            right: 0;
+            transform: none;
+        }
+        .holo-tooltip-right .holo-tooltip::before {
+            left: auto;
+            right: 16px;
+            transform: none;
+        }
+
+        /* Desktop Hover State */
         @media (hover: hover) and (pointer: fine) {
-            .holo-tooltip-container:hover .holo-tooltip { opacity: 1; visibility: visible; top: 110%; }
+            .holo-tooltip-container:hover > .holo-tooltip {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(-50%) translateY(0);
+            }
+            .holo-tooltip-up:hover > .holo-tooltip {
+                transform: translateX(-50%) translateY(0);
+            }
+            .holo-tooltip-right:hover > .holo-tooltip {
+                transform: none;
+            }
+        }
+
+        /* Active State for Touch / Click */
+        .holo-tooltip-container.tooltip-active > .holo-tooltip {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateX(-50%) translateY(0) !important;
+            pointer-events: auto;
+        }
+        .holo-tooltip-right.tooltip-active > .holo-tooltip {
+            transform: none !important;
+        }
+
+        /* Light Theme Tooltip Override */
+        .theme-light .holo-tooltip {
+            background: rgba(255, 255, 255, 0.98) !important;
+            border: 1.5px solid #0284c7 !important;
+            color: #0f172a !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25), 0 0 10px rgba(2, 132, 199, 0.3) !important;
+            font-weight: 600 !important;
+        }
+        .theme-light .holo-tooltip::before {
+            border-color: transparent transparent #0284c7 transparent !important;
+        }
+        .theme-light .holo-tooltip-up .holo-tooltip::before {
+            border-color: #0284c7 transparent transparent transparent !important;
+        }
+
+        /* SMARTPHONE & TABLET RESPONSIVE ADAPTATION (<= 1024px) */
+        @media (max-width: 1024px) {
+            .holo-tooltip {
+                white-space: normal !important;
+                max-width: min(280px, 86vw) !important;
+                width: max-content !important;
+                font-size: 11.5px !important;
+                padding: 6px 11px !important;
+                line-height: 1.35 !important;
+                border-radius: 8px !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+            }
+            /* Map tooltips stay visible and readable on mobile/tablet */
+            .custom-tooltip {
+                font-size: 11px !important;
+                padding: 4px 8px !important;
+                max-width: 220px !important;
+                white-space: normal !important;
+            }
         }
 
         #screensaverScreen { display: none; opacity: 0; }
@@ -144,15 +253,159 @@
         .radar-pulse-ring { animation: radarPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite; }
         @keyframes radarPing { 0% { transform: scale(0.6); opacity: 1; } 75%, 100% { transform: scale(2.2); opacity: 0; } }
     
-        /* AUTO-HIDE TOOLTIPS ON SMARTPHONE & TABLET (<= 1024px) */
-        @media (max-width: 1024px) {
-            .holo-tooltip, .custom-tooltip, [data-tooltip]::before, [data-tooltip]::after {
-                display: none !important;
-                opacity: 0 !important;
-                visibility: hidden !important;
-                pointer-events: none !important;
-            }
+        /* HIGH CONTRAST & TYPOGRAPHY SYSTEM */
+        :root {
+            --app-font-scale: 1;
         }
+        body {
+            font-size: calc(16.5px * var(--app-font-scale, 1));
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* DARK MODE HIGH CONTRAST */
+        .theme-dark {
+            --bg-main: #020617;
+            --bg-card: rgba(11, 19, 38, 0.96);
+            --bg-header: rgba(11, 19, 38, 0.98);
+            --border-color: rgba(56, 189, 248, 0.35);
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --panel-inner: rgba(15, 23, 42, 0.85);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #60a5fa;
+            --accent-emerald: #34d399;
+            --tooltip-bg: rgba(11, 19, 38, 0.98);
+            --tooltip-border: #38bdf8;
+            --tooltip-text: #ffffff;
+        }
+        .theme-dark .text-slate-400 {
+            color: #cbd5e1 !important;
+        }
+        .theme-dark .text-slate-300 {
+            color: #f1f5f9 !important;
+        }
+        .theme-dark .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+
+        /* LIGHT MODE HIGH CONTRAST */
+        .theme-light {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-header: #ffffff;
+            --border-color: #94a3b8;
+            --text-main: #020617;
+            --text-muted: #1e293b;
+            --panel-inner: #f1f5f9;
+            --accent-cyan: #0284c7;
+            --accent-blue: #1d4ed8;
+            --accent-emerald: #047857;
+            --tooltip-bg: #ffffff;
+            --tooltip-border: #0284c7;
+            --tooltip-text: #020617;
+        }
+        .theme-light .bg-slate-950,
+        .theme-light .bg-slate-950\/90,
+        .theme-light .bg-slate-950\/85,
+        .theme-light .bg-slate-950\/80,
+        .theme-light .bg-slate-950\/70,
+        .theme-light .bg-slate-950\/60,
+        .theme-light .bg-slate-900,
+        .theme-light .bg-slate-900\/80,
+        .theme-light .bg-slate-900\/70,
+        .theme-light .bg-slate-900\/60,
+        .theme-light .bg-\[\#090e17\],
+        .theme-light .bg-\[\#0d1424\],
+        .theme-light .bg-\[\#0d131f\],
+        .theme-light .bg-\[\#030814\] {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #020617 !important;
+        }
+        .theme-light .text-white,
+        .theme-light .text-slate-100,
+        .theme-light .text-slate-200,
+        .theme-light .text-slate-300 {
+            color: #0f172a !important;
+            font-weight: 600 !important;
+        }
+        .theme-light .text-slate-400,
+        .theme-light .text-slate-500 {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+        }
+        .theme-light .border-slate-800,
+        .theme-light .border-slate-700,
+        .theme-light .border-slate-800\/80 {
+            border-color: #94a3b8 !important;
+        }
+        .theme-light select,
+        .theme-light input[type="text"],
+        .theme-light input[type="number"],
+        .theme-light input[type="password"] {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #64748b !important;
+        }
+        .theme-light .formula-box {
+            background: #f1f5f9 !important;
+            color: #0369a1 !important;
+            border-left: 4px solid #0284c7 !important;
+            font-weight: bold !important;
+        }
+        .theme-light .bg-cyan-950,
+        .theme-light .bg-cyan-950\/80,
+        .theme-light .bg-cyan-950\/90 {
+            background-color: #e0f2fe !important;
+            color: #0369a1 !important;
+            border-color: #38bdf8 !important;
+        }
+        .theme-light .bg-blue-950,
+        .theme-light .bg-blue-950\/80 {
+            background-color: #dbeafe !important;
+            color: #1d4ed8 !important;
+            border-color: #60a5fa !important;
+        }
+        .theme-light .bg-emerald-950,
+        .theme-light .bg-emerald-950\/80 {
+            background-color: #d1fae5 !important;
+            color: #047857 !important;
+            border-color: #34d399 !important;
+        }
+        .theme-light .bg-indigo-950 {
+            background-color: #e0e7ff !important;
+            color: #4338ca !important;
+            border-color: #818cf8 !important;
+        }
+        .theme-light .bg-amber-950 {
+            background-color: #fef3c7 !important;
+            color: #b45309 !important;
+            border-color: #fbbf24 !important;
+        }
+        .theme-light .bg-purple-950 {
+            background-color: #f3e8ff !important;
+            color: #6b21a8 !important;
+            border-color: #c084fc !important;
+        }
+        .theme-light .bg-rose-950 {
+            background-color: #ffe4e6 !important;
+            color: #be123c !important;
+            border-color: #fb7185 !important;
+        }
+        .theme-light .text-cyan-400 { color: #0284c7 !important; }
+        .theme-light .text-cyan-300 { color: #0369a1 !important; }
+        .theme-light .text-blue-400 { color: #2563eb !important; }
+        .theme-light .text-blue-300 { color: #1d4ed8 !important; }
+        .theme-light .text-emerald-400 { color: #059669 !important; }
+        .theme-light .text-emerald-300 { color: #047857 !important; }
+        .theme-light .text-amber-400 { color: #d97706 !important; }
+        .theme-light .text-amber-300 { color: #b45309 !important; }
+        .theme-light .text-rose-400 { color: #e11d48 !important; }
+        .theme-light .text-purple-400 { color: #7c3aed !important; }
+        .theme-light .text-purple-300 { color: #6b21a8 !important; }
+
+        /* AUTO-HIDE MEDIA QUERY REMOVED - TOOLTIPS NOW RESPONSIVE ON MOBILE/TABLET */
 
         :root {
             --app-font-scale: 1;
@@ -162,6 +415,7 @@
         }
 
     </style>
+    <link rel="stylesheet" href="dashboard_styles.css">
 </head>
 <body id="appBody" class="theme-dark bg-[var(--bg-main)] text-[var(--text-main)] p-3 md:p-5 min-h-screen flex flex-col justify-between overflow-x-hidden relative pb-28">
 
@@ -169,125 +423,159 @@
     <div id="mainDashboardInterface" class="w-full flex flex-col justify-between flex-1 gap-4">
         
         <!-- HEADER SECTION -->
-        <header class="w-full bg-[var(--bg-header)] backdrop-blur-md p-4 md:p-5 rounded-2xl border-2 border-[var(--border-color)] flex flex-col xl:flex-row justify-between items-center gap-4 shadow-xl">
-            <div class="flex items-center gap-4 w-full xl:w-auto min-w-0 flex-1">
-                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 shrink-0 shadow-inner group hover:border-cyan-500 transition-colors">
-                    <i id="damHeaderIcon" class="fa-solid fa-dam text-cyan-400 text-3xl md:text-4xl animate-pulse"></i>
+        <header class="w-full bg-[#030712]/95 backdrop-blur-md p-2 sm:py-2.5 sm:px-3.5 rounded-2xl border-2 border-slate-800 flex flex-col xl:flex-row items-center justify-between gap-2.5 shadow-2xl select-none min-h-[92px] relative z-30">
+            <!-- 1. LEFT BLOCK: BADGES, TITLE, SUBTITLE (EXACTLY AS IN UPLOADED PHOTO) -->
+            <div class="flex flex-col justify-center shrink-0 min-w-[430px] max-w-[470px]">
+                <!-- BADGES -->
+                <div class="flex items-center gap-1.5 flex-nowrap mb-1">
+                    <span class="bg-[#031d28] text-cyan-300 border border-cyan-500/70 text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider whitespace-nowrap shadow-sm">DAM DECISION SUPPORT SYSTEM</span>
+                    <span id="badgeActiveDam" class="bg-[#081b3a] text-blue-300 border border-blue-500/70 text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider whitespace-nowrap shadow-sm">BENDUNGAN POSO-1 (SULAWESI TENGAH)</span>
+                    <span class="bg-[#04281f] text-emerald-300 border border-emerald-500/70 text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider whitespace-nowrap shadow-sm">MULTI-PURPOSE HYDROPOWER &amp; FLOOD CONTROL</span>
                 </div>
-                <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="bg-cyan-950/80 text-cyan-400 border border-cyan-500/50 text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider">Dam Decision Support System</span>
-                        <span id="badgeActiveDam" class="bg-blue-950/80 text-blue-300 border border-blue-500/50 text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider">Bendungan Poso-1 (Sulawesi Tengah)</span>
-                        <span class="bg-emerald-950/80 text-emerald-400 border border-emerald-500/50 text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase tracking-wider">Multi-Purpose Hydropower & Flood Control</span>
-                    </div>
-                    <h1 id="mainAppTitle" class="font-tech text-lg md:text-xl lg:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-cyan-300 to-blue-400 leading-tight uppercase mt-1">
+                <!-- TITLE -->
+                <div class="flex items-baseline gap-1.5 whitespace-nowrap">
+                    <h1 id="mainAppTitle" class="font-tech text-lg sm:text-xl font-black tracking-wide text-white uppercase leading-none">
                         DAM DECISION SUPPORT SYSTEM (DAM-DSS)
-                        <span class="text-cyan-400 text-[0.6em] align-top">v4.9 PRO</span>
                     </h1>
-                    <p class="text-xs font-mono text-[var(--text-muted)] mt-1 uppercase tracking-wider flex items-center gap-2 font-bold">
-                        <span id="sync-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce"></span> 
-                        <span id="sync-status-text">Pemodelan Hidrologi & Routing Waduk · Keamanan Struktur · Alokasi Multi-Guna PLTA Poso-1 & Kerinci</span>
-                    </p>
+                    <span class="text-cyan-400 font-tech font-bold text-xs uppercase tracking-wider">V4.9 PRO</span>
+                </div>
+                <!-- SUBTITLE -->
+                <p class="text-[9.5px] font-mono text-slate-300 mt-1 uppercase tracking-wider flex items-center gap-1.5 font-bold whitespace-nowrap">
+                    <span id="sync-status-dot" class="inline-block w-2 h-2 rounded-full bg-cyan-400 shrink-0 shadow-[0_0_6px_#22d3ee]"></span> 
+                    <span id="sync-status-text">PEMODELAN HIDROLOGI &amp; ROUTING WADUK · KEAMANAN STRUKTUR · ALOKASI MULTI-GUNA PLTA POSO-1 &amp; KERINCI</span>
+                </p>
+            </div>
+
+            <!-- 2. MIDDLE BLOCK: CLOCK + TELEMETRY (TOP) & 4 METRIC CARDS (BOTTOM) -->
+            <div class="grid grid-cols-4 gap-1.5 text-center shrink-0 w-[500px] sm:w-[530px]">
+                <!-- TOP ROW: CLOCK (ABOVE ELEVASI & INFLOW) -->
+                <div class="col-span-2 flex items-center justify-between gap-1.5 bg-[#050c1e] border border-cyan-500/80 px-3 py-1 rounded-xl shadow-md min-w-0">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="w-6 h-6 rounded-full border border-cyan-400/80 flex items-center justify-center shrink-0 bg-cyan-950/40">
+                            <i class="fa-regular fa-clock text-cyan-400 text-xs"></i>
+                        </div>
+                        <div class="flex flex-col text-left leading-none min-w-0">
+                            <span id="topDashDate" class="text-[8.5px] font-bold text-slate-200 font-mono tracking-wider uppercase truncate">RABU, 7 OKTOBER 2026</span>
+                            <span id="topDashTime" class="text-sm font-black text-cyan-400 font-tech tracking-wider mt-0.5 glow-text">06.48.30</span>
+                        </div>
+                    </div>
+                    <span class="text-[8px] font-mono text-cyan-300 bg-cyan-950/80 border border-cyan-500/80 px-1.5 py-0.5 rounded font-bold shrink-0">LIVE</span>
+                </div>
+
+                <!-- TOP ROW: TELEMETRY STATUS (ABOVE OUTFLOW & IKK) -->
+                <div class="col-span-2 flex items-center justify-center gap-2 bg-[#050c1e] border border-cyan-500/70 px-3 py-1 rounded-xl shadow-md">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_#34d399]"></span>
+                    <span class="text-[9.5px] font-mono font-bold text-cyan-300 uppercase tracking-widest truncate" id="lblLiveTelemetry">TELEMETRI REAL-TIME</span>
+                </div>
+
+                <!-- BOTTOM ROW: 4 METRIC PILL CARDS -->
+                <!-- CARD 1: ELEVASI (TMA) -->
+                <div class="px-2.5 py-1 bg-[#050c1e] border border-cyan-500/70 rounded-xl min-w-[80px] holo-tooltip-container shadow-inner">
+                    <div class="text-[8.5px] font-black text-slate-300 font-tech uppercase" id="lblTmaHeader">ELEVASI (TMA)</div>
+                    <div id="top-tma-val" class="text-sm font-tech font-black text-cyan-400 mt-0.5">510.50 m</div>
+                    <div class="holo-tooltip"><i class="fa-solid fa-water text-cyan-400"></i> <span id="tipTmaHeader">Tinggi Muka Air Waduk Normal</span></div>
+                </div>
+
+                <!-- CARD 2: INFLOW DAS -->
+                <div class="px-2.5 py-1 bg-[#050c1e] border border-blue-500/70 rounded-xl min-w-[80px] holo-tooltip-container shadow-inner">
+                    <div class="text-[8.5px] font-black text-slate-300 font-tech uppercase" id="lblInflowHeader">INFLOW DAS</div>
+                    <div id="top-inflow-val" class="text-sm font-tech font-black text-blue-400 mt-0.5">145.0 m³/s</div>
+                    <div class="holo-tooltip"><i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i> <span id="tipInflowHeader">Debit Masuk Sungai &amp; DTA Danau</span></div>
+                </div>
+
+                <!-- CARD 3: OUTFLOW / TURBIN -->
+                <div class="px-2.5 py-1 bg-[#050c1e] border border-emerald-500/60 rounded-xl min-w-[80px] holo-tooltip-container shadow-inner">
+                    <div class="text-[8.5px] font-black text-slate-300 font-tech uppercase" id="lblOutflowHeader">OUTFLOW / TURBIN</div>
+                    <div id="top-outflow-val" class="text-sm font-tech font-black text-emerald-400 mt-0.5">133.6 m³/s</div>
+                    <div class="holo-tooltip"><i class="fa-solid fa-bolt text-emerald-400"></i> <span id="tipOutflowHeader">Pelepasan Turbin PLTA &amp; Spillway</span></div>
+                </div>
+
+                <!-- CARD 4: INDEKS IKK -->
+                <div class="px-2.5 py-1 bg-[#050c1e] border border-emerald-500/60 rounded-xl min-w-[80px] holo-tooltip-container shadow-inner">
+                    <div class="text-[8.5px] font-black text-slate-300 font-tech uppercase" id="lblIkkHeader">INDEKS IKK</div>
+                    <div id="top-ikk-val" class="text-sm font-tech font-black text-emerald-400 mt-0.5">0.89 (AMAN)</div>
+                    <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-emerald-400"></i> <span id="tipIkkHeader">Indeks Keamanan &amp; Keberlanjutan Bendungan</span></div>
                 </div>
             </div>
 
-            <!-- CLOCK -->
-            <div class="flex items-center justify-center bg-slate-950 border border-cyan-500/40 px-4 py-2 rounded-xl shadow-lg shrink-0 my-1 xl:my-0">
-                <i class="fa-regular fa-clock text-cyan-400 animate-pulse text-xl mr-3"></i>
-                <div class="flex flex-col text-left">
-                    <span id="topDashDate" class="text-[10px] font-bold text-slate-400 font-mono tracking-widest uppercase">Memuat Hari...</span>
-                    <span id="topDashTime" class="text-base md:text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 font-tech tracking-widest">00:00:00</span>
+            <!-- 3. RIGHT BLOCK: 2 ROWS X 5 BUTTONS (MATCHING EXACT PHOTO COLORS & OUTLINES) -->
+            <div class="flex flex-col gap-1.5 shrink-0 w-[510px] sm:w-[540px] justify-center">
+                <!-- ROW 1 (5 BUTTONS) -->
+                <div class="grid grid-cols-5 gap-1.5 w-full">
+                    <!-- 1. DAM SELECTOR -->
+                    <div class="relative holo-tooltip-container">
+                        <select id="headerDamSelect" onchange="switchDam(this.value)" class="w-full h-7 bg-[#050c1e] text-cyan-300 border border-cyan-500/80 text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-950 transition-all cursor-pointer shadow-md outline-none whitespace-nowrap">
+                            <option value="poso">⚡ POSO-1</option>
+                            <option value="kerinci">🏔️ KERINCI</option>
+                        </select>
+                        <div class="holo-tooltip"><i class="fa-solid fa-dam text-cyan-400"></i> <span id="tipDamSelect">Pilih Lokasi Bendungan</span></div>
+                    </div>
+                    <!-- 2. SKENARIO -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" onclick="openScenarioModal()" class="w-full h-7 bg-[#050c1e] text-purple-300 border border-purple-500/90 hover:border-purple-400 text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-purple-950/60 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-code-compare text-purple-400 text-[10px]"></i> <span id="btnHeaderScenarios">SKENARIO</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-code-compare text-purple-400"></i> <span id="tipHeaderScenarios">Bandingkan 4 Skenario Pola Operasi</span></div>
+                    </div>
+                    <!-- 3. RTD & EAP -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" onclick="openEapModal()" class="w-full h-7 bg-[#050c1e] text-amber-300 border border-amber-500/90 hover:border-amber-400 text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-amber-950/60 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-[10px]"></i> <span id="btnHeaderEap">RTD &amp; EAP</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-triangle-exclamation text-amber-400"></i> <span id="tipHeaderEap">Rencana Tindak Darurat &amp; Mitigasi</span></div>
+                    </div>
+                    <!-- 4. DATA TEKNIS -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" onclick="openTechSpecModal()" class="w-full h-7 bg-[#050c1e] text-blue-300 border border-blue-500/90 hover:border-blue-400 text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-blue-950/60 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-database text-blue-400 text-[10px]"></i> <span id="btnHeaderTechSpec">DATA TEKNIS</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-database text-blue-400"></i> <span id="tipHeaderTechSpec">Data Teknis &amp; Instrumentasi</span></div>
+                    </div>
+                    <!-- 5. FULLSCREEN -->
+                    <div class="holo-tooltip-container holo-tooltip-right">
+                        <button type="button" id="btnDashFullscreen" onclick="toggleDashboardFullscreen()" class="w-full h-7 bg-[#050c1e] text-cyan-300 border border-cyan-400/90 hover:border-cyan-300 text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-950/60 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
+                            <i id="dashFullscreenIcon" class="fa-solid fa-expand text-[10px] text-cyan-400"></i> <span id="dashFullscreenLabel">FULLSCREEN</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-expand text-cyan-400"></i> <span id="tipDashFullscreen">Layar Penuh Dasbor Utama (F11)</span></div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- METRIC CARDS & ACTION BUTTONS -->
-            <div class="flex flex-col xl:flex-row items-center gap-3 w-full xl:w-auto justify-end flex-1">
-                <div class="grid grid-cols-4 gap-1.5 text-center w-full sm:w-auto shrink-0">
-                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblTmaHeader">ELEVASI (TMA)</div>
-                        <div id="top-tma-val" class="text-xs md:text-sm font-tech font-black text-cyan-400 mt-0.5">510.50 m</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-water text-cyan-400"></i> <span id="tipTmaHeader">Tinggi Muka Air Waduk Normal</span></div>
+                <!-- ROW 2 (5 BUTTONS) -->
+                <div class="grid grid-cols-5 gap-1.5 w-full">
+                    <!-- 1. G-DRIVE -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" onclick="openVaultModal()" class="w-full h-7 bg-[#050c1e] text-cyan-400 border border-cyan-500/80 hover:border-cyan-300 text-[9.5px] sm:text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-950/60 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-brands fa-google-drive text-[10px]"></i> <span id="btnHeaderVault">G-DRIVE</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-brands fa-google-drive text-cyan-400"></i> <span id="tipHeaderVault">Arsip Dokumen As-Built &amp; Laporan</span></div>
                     </div>
-                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblInflowHeader">INFLOW DAS</div>
-                        <div id="top-inflow-val" class="text-xs md:text-sm font-tech font-black text-blue-400 mt-0.5">145.0 m³/s</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-cloud-showers-heavy text-blue-400"></i> <span id="tipInflowHeader">Debit Masuk Sungai & DTA Danau</span></div>
+                    <!-- 2. TIM AHLI -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" onclick="openCreatorModal()" class="w-full h-7 bg-[#050c1e] text-cyan-300 border border-cyan-500/80 hover:border-cyan-300 text-[9.5px] sm:text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-950/60 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-user-graduate text-cyan-400 text-[10px]"></i> <span id="btnHeaderTeam">TIM AHLI</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-user-graduate text-cyan-400"></i> <span id="tipHeaderTeam">Profil Tim Peneliti &amp; Pengembang</span></div>
                     </div>
-                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblOutflowHeader">OUTFLOW / TURBIN</div>
-                        <div id="top-outflow-val" class="text-xs md:text-sm font-tech font-black text-emerald-400 mt-0.5">140.0 m³/s</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-bolt text-emerald-400"></i> <span id="tipOutflowHeader">Pelepasan Turbin PLTA & Spillway</span></div>
+                    <!-- 3. HURUF: 100% -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" id="btnTextZoom" onclick="toggleFontSize()" class="w-full h-7 bg-[#050c1e] text-amber-300 border border-amber-500/80 hover:border-amber-300 text-[9.5px] sm:text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-amber-950/60 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-text-height text-amber-400 text-[10px]"></i> <span id="fontZoomLabel">HURUF: 100%</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-text-height text-amber-400"></i> <span id="tipHeaderZoom">Perbesar / Perkecil Huruf Teks Dasbor</span></div>
                     </div>
-                    <div class="px-2 py-1.5 bg-slate-950/70 border border-[var(--border-color)] rounded-xl min-w-[78px] holo-tooltip-container">
-                        <div class="text-[9px] font-black text-[var(--text-muted)] font-tech uppercase" id="lblIkkHeader">INDEKS IKK</div>
-                        <div id="top-ikk-val" class="text-xs md:text-sm font-tech font-black text-emerald-400 mt-0.5">0.86 (AMAN)</div>
-                        <div class="holo-tooltip"><i class="fa-solid fa-shield-halved text-emerald-400"></i> <span id="tipIkkHeader">Indeks Keamanan & Keberlanjutan Bendungan</span></div>
+                    <!-- 4. ID ⇄ EN -->
+                    <div class="holo-tooltip-container">
+                        <button type="button" id="btnTranslate" onclick="toggleLanguage()" class="w-full h-7 bg-[#050c1e] text-emerald-300 border border-emerald-500/80 hover:border-emerald-300 text-[9.5px] sm:text-[10px] font-mono font-bold px-2 rounded-lg hover:bg-emerald-950/60 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-language text-emerald-400 text-[10px]"></i> <span id="translateLabel">ID ⇄ EN</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-language text-emerald-400"></i> <span id="tipHeaderTrans">Terjemahkan (Bahasa Indonesia / English)</span></div>
                     </div>
-                </div>
-
-                <!-- ACTION BUTTONS: 2 VERTICAL ROWS ONLY (SUSUNAN 2 BARIS VERTIKAL RAPI & PROFESIONAL) -->
-                <div class="flex flex-col gap-1.5 w-full xl:w-auto shrink-0 justify-center">
-                    <!-- BARIS 1: 4 TOMBOL OPERASIONAL UTAMA -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
-                        <div class="relative holo-tooltip-container">
-                            <select id="headerDamSelect" onchange="switchDam(this.value)" class="w-full h-8 bg-cyan-950 text-cyan-300 border border-cyan-500/80 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-cyan-900 transition-all cursor-pointer shadow-md outline-none">
-                                <option value="poso">⚡ POSO-1 (SULTENG)</option>
-                                <option value="kerinci">🏔️ KERINCI (JAMBI)</option>
-                            </select>
-                            <div class="holo-tooltip"><i class="fa-solid fa-dam text-cyan-400"></i> <span id="tipDamSelect">Pilih Lokasi Bendungan</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="openScenarioModal()" class="w-full h-8 bg-indigo-950 text-indigo-300 border border-indigo-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-indigo-900 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-code-compare text-xs"></i> <span id="btnHeaderScenarios">SKENARIO OPERASI</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-code-compare text-indigo-400"></i> <span id="tipHeaderScenarios">Bandingkan 4 Skenario Pola Operasi</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="openEapModal()" class="w-full h-8 bg-amber-950 text-amber-300 border border-amber-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-amber-900 transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-triangle-exclamation text-xs"></i> <span id="btnHeaderEap">RTD &amp; SOP EAP</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-triangle-exclamation text-amber-400"></i> <span id="tipHeaderEap">Rencana Tindak Darurat &amp; Mitigasi</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="openTechSpecModal()" class="w-full h-8 bg-blue-950 text-blue-300 border border-blue-500/60 text-[11px] font-mono font-bold px-2 rounded-lg hover:bg-blue-900 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-database text-xs"></i> <span id="btnHeaderTechSpec">SPESIFIKASI TEKNIK</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-database text-blue-400"></i> <span id="tipHeaderTechSpec">Data Teknis &amp; Instrumentasi</span></div>
-                        </div>
-                    </div>
-
-                    <!-- BARIS 2: 5 TOMBOL KONTROL, UTILITAS, ZOOM TEKS & TRANSLATE -->
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 w-full">
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="openVaultModal()" class="w-full h-7 bg-slate-900 text-cyan-400 text-[10.5px] font-mono font-bold px-2 rounded border border-cyan-500/50 hover:bg-cyan-950 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
-                                <i class="fa-brands fa-google-drive text-xs"></i> <span id="btnHeaderVault">G-DRIVE VAULT</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-brands fa-google-drive text-cyan-400"></i> <span id="tipHeaderVault">Arsip Dokumen As-Built &amp; Laporan</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="openCreatorModal()" class="w-full h-7 bg-slate-800 hover:bg-slate-700 text-white text-[10.5px] font-mono font-bold px-2 rounded border border-slate-700 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-user-graduate text-cyan-400 text-xs"></i> <span id="btnHeaderTeam">TIM PENGEMBANG</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-user-graduate text-cyan-400"></i> <span id="tipHeaderTeam">Profil Tim Peneliti &amp; Pengembang</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" id="btnTextZoom" onclick="toggleFontSize()" class="w-full h-7 bg-slate-900 hover:bg-slate-800 text-amber-300 text-[10.5px] font-mono font-bold px-2 rounded border border-amber-500/60 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-text-height text-amber-400 text-xs"></i> <span id="fontZoomLabel">HURUF: 100%</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-text-height text-amber-400"></i> <span id="tipHeaderZoom">Perbesar / Perkecil Huruf Teks Dasbor</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" id="btnTranslate" onclick="toggleLanguage()" class="w-full h-7 bg-slate-900 hover:bg-slate-800 text-emerald-300 text-[10.5px] font-mono font-bold px-2 rounded border border-emerald-500/60 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
-                                <i class="fa-solid fa-language text-emerald-400 text-xs"></i> <span id="translateLabel">ID ⇄ EN</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-language text-emerald-400"></i> <span id="tipHeaderTrans">Terjemahkan (Bahasa Indonesia / English)</span></div>
-                        </div>
-                        <div class="holo-tooltip-container">
-                            <button type="button" onclick="toggleThemeInterface()" class="w-full h-7 bg-slate-950 border border-slate-700 text-[10.5px] font-mono font-bold px-2 rounded text-slate-300 hover:bg-slate-900 flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
-                                <i id="themeIcon" class="fa-solid fa-moon text-xs"></i> <span id="themeText">DARK</span>
-                            </button>
-                            <div class="holo-tooltip"><i class="fa-solid fa-circle-half-stroke text-slate-300"></i> <span id="tipHeaderTheme">Beralih Tema Gelap / Terang</span></div>
-                        </div>
+                    <!-- 5. DARK -->
+                    <div class="holo-tooltip-container holo-tooltip-right">
+                        <button type="button" onclick="toggleThemeInterface()" class="w-full h-7 bg-[#050c1e] border border-slate-500 hover:border-white text-[9.5px] sm:text-[10px] font-mono font-bold px-2 rounded-lg text-slate-200 hover:bg-slate-900 flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i id="themeIcon" class="fa-solid fa-moon text-[10px]"></i> <span id="themeText">DARK</span>
+                        </button>
+                        <div class="holo-tooltip"><i class="fa-solid fa-circle-half-stroke text-slate-300"></i> <span id="tipHeaderTheme">Beralih Tema Gelap / Terang</span></div>
                     </div>
                 </div>
             </div>
@@ -561,7 +849,7 @@
 
                 <!-- OUTPUT KEAMANAN & IKK SCORE -->
                 <div class="border-t border-slate-800 pt-2 flex flex-col">
-                    <div class="p-2 bg-slate-950 rounded-xl border border-cyan-500/40 flex items-center justify-between px-3 mb-2 holo-tooltip-container">
+                    <div class="p-2 bg-slate-950 rounded-xl border border-cyan-500/40 flex items-center justify-between px-3 mb-2 holo-tooltip-container holo-tooltip-up">
                         <div>
                             <span class="text-[9.5px] font-tech text-slate-400 block font-bold uppercase" id="lblIkkBoxTitle">INDEKS KEAMANAN WADUK (IKK)</span>
                             <span id="ikk-status" class="block text-[10.5px] font-mono font-bold text-emerald-400 uppercase tracking-wider">KONDISI AMAN (NORMAL OPERATION)</span>
@@ -2932,7 +3220,10 @@ const I18N = {
         lblMagSeismik: "Magnitudo Gempa Historis Maks:",
         lblSlipSeismik: "Pergeseran Sesar Rata-rata:",
         lblLiqSeismik: "Status Likuefaksi Fondasi:",
-        valLiqSeismik: "Resiko Sangat Rendah"
+        valLiqSeismik: "Resiko Sangat Rendah",
+        lblLiveTelemetry: "TELEMETRI REAL-TIME",
+        btnDashFullscreen: "FULLSCREEN",
+        tipDashFullscreen: "Layar Penuh Dasbor Utama (F11)"
     },
     en: {
         syncStatus: "Reservoir Hydrology & Routing · Structural Safety · Multi-Purpose Hydropower Allocation Poso-1 & Kerinci",
@@ -2975,7 +3266,10 @@ const I18N = {
         lblMagSeismik: "Max Historical Magnitude:",
         lblSlipSeismik: "Average Fault Slip Rate:",
         lblLiqSeismik: "Foundation Liquefaction Status:",
-        valLiqSeismik: "Very Low Risk"
+        valLiqSeismik: "Very Low Risk",
+        lblLiveTelemetry: "LIVE REAL-TIME TELEMETRY",
+        btnDashFullscreen: "FULLSCREEN",
+        tipDashFullscreen: "Toggle Dashboard Fullscreen (F11)"
     }
 };
 
@@ -3133,11 +3427,18 @@ const damWisdomQuotes = [
 
 function updateClocks() {
     const now = new Date();
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    
-    const timeStr = now.toLocaleTimeString('id-ID');
-    const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`.toUpperCase();
+    let dateStr, timeStr;
+    if (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+        dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`.toUpperCase();
+    } else {
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        timeStr = now.toLocaleTimeString('id-ID').replace(/:/g, '.');
+        dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`.toUpperCase();
+    }
     
     const scTime = document.getElementById('scTime'); if (scTime) scTime.innerText = timeStr;
     const scDate = document.getElementById('scDate'); if (scDate) scDate.innerText = dateStr;
@@ -3220,6 +3521,42 @@ function animateEarth() {
 }
 
 // FULLSCREEN & UI TOGGLES
+// DASHBOARD FULLSCREEN CONTROLLER
+function toggleDashboardFullscreen() {
+    const icon = document.getElementById('dashFullscreenIcon');
+    const label = document.getElementById('dashFullscreenLabel');
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+            if (icon) icon.className = "fa-solid fa-compress text-xs text-amber-400";
+            if (label) label.innerText = (typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'NORMAL' : 'NORMAL';
+            toastNotifikasi((typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'Dashboard Fullscreen Activated' : 'Layar Penuh Dasbor Utama Aktif', 'fa-expand');
+        }).catch(err => {
+            console.error(err);
+            toastNotifikasi('Gagal mengaktifkan mode layar penuh', 'fa-triangle-exclamation');
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().then(() => {
+                if (icon) icon.className = "fa-solid fa-expand text-xs text-cyan-400";
+                if (label) label.innerText = 'FULLSCREEN';
+                toastNotifikasi((typeof currentLanguage !== 'undefined' && currentLanguage === 'en') ? 'Exited Fullscreen' : 'Keluar dari Mode Layar Penuh', 'fa-compress');
+            });
+        }
+    }
+}
+
+document.addEventListener('fullscreenchange', () => {
+    const icon = document.getElementById('dashFullscreenIcon');
+    const label = document.getElementById('dashFullscreenLabel');
+    if (document.fullscreenElement) {
+        if (icon) icon.className = "fa-solid fa-compress text-xs text-amber-400";
+        if (label) label.innerText = 'NORMAL';
+    } else {
+        if (icon) icon.className = "fa-solid fa-expand text-xs text-cyan-400";
+        if (label) label.innerText = 'FULLSCREEN';
+    }
+});
+
 function toggleMapFullscreen() {
     const mapWrapper = document.getElementById('mapFullscreenWrapper');
     if (!document.fullscreenElement) {
@@ -3367,7 +3704,46 @@ function openParamInfo(param) {
 }
 
 // ONLOAD INITIALIZATION
+// MOBILE & TABLET TOUCH TOOLTIP CONTROLLER
+function initInteractiveTooltips() {
+    const containers = document.querySelectorAll('.holo-tooltip-container');
+    let activeContainer = null;
+    let timer = null;
+
+    containers.forEach(container => {
+        // Toggle tooltip on tap for touch devices or screens <= 1024px
+        container.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 || 'ontouchstart' in window) {
+                if (activeContainer && activeContainer !== container) {
+                    activeContainer.classList.remove('tooltip-active');
+                }
+                
+                if (container.classList.contains('tooltip-active')) {
+                    container.classList.remove('tooltip-active');
+                    activeContainer = null;
+                } else {
+                    container.classList.add('tooltip-active');
+                    activeContainer = container;
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        container.classList.remove('tooltip-active');
+                        activeContainer = null;
+                    }, 4000);
+                }
+            }
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (activeContainer && !activeContainer.contains(e.target)) {
+            activeContainer.classList.remove('tooltip-active');
+            activeContainer = null;
+        }
+    });
+}
+
 window.onload = () => {
+    initInteractiveTooltips();
     renderDamGisLayers();
     initCharts();
     runHydroSimulation();
